@@ -2,7 +2,18 @@
 
 namespace App\kernel\View;
 
-class View {
+include_once (APP_PATH . "/kernel/Session/SessionInterface.php");
+include_once (APP_PATH . "/kernel/View/ViewInterface.php");
+
+use App\kernel\Session\SessionInterface;
+use App\kernel\View\ViewInterface;
+
+class View implements ViewInterface
+{
+    public function __construct(
+        private SessionInterface $session,
+    ){}
+
     public function page(string $name) : void {
         $viewPath = APP_PATH . "/views/pages/$name.php";
         if(!file_exists($viewPath)) {
@@ -10,9 +21,7 @@ class View {
             return;
         }
 
-        extract([
-            'view' => $this
-        ]);
+        extract($this->defaultData());
 
         include_once $viewPath;
     }
@@ -25,5 +34,12 @@ class View {
         }
 
         include_once $viewPath;
+    }
+
+    private function defaultData() : array {
+        return [
+            'view' => $this,
+            'session' => $this->session
+        ];
     }
 }

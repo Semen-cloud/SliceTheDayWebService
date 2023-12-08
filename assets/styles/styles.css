@@ -9,3 +9,24 @@ body {
     background-color: #f4f4f4;
     padding: 20px;
 }
+
+.input {
+    display: block;
+}
+
+.container {
+    margin: 20px 5%;
+}
+
+.navDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product {
+    display: inline-block;
+}
+
+.modalWindow {
+    display: none;
+}

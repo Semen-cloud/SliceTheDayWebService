@@ -1,25 +1,36 @@
 <?php
 
 namespace App\kernel\Router;
+use App\kernel\Database\DatabaseInterface;
 
 include_once(APP_PATH . '/kernel/Controller/Controller.php');
-include_once(APP_PATH . '/kernel/View/View.php');
-include_once(APP_PATH . '/kernel/Http/Request.php');
+include_once(APP_PATH . '/kernel/View/ViewInterface.php');
+include_once(APP_PATH . '/kernel/Http/RequestInterface.php');
+include_once(APP_PATH . '/kernel/Http/RedirectInterface.php');
+include_once(APP_PATH . '/kernel/Session/SessionInterface.php');
+include_once(APP_PATH . '/kernel/Router/RouterInterface.php');
+include_once(APP_PATH . '/kernel/Database/DatabaseInterface.php');
 
 use App\kernel\Controller\Controller;
-use App\kernel\View\View;
-use App\kernel\Http\Request;
+use App\kernel\View\ViewInterface;
+use App\kernel\Http\RequestInterface;
+use App\kernel\Http\RedirectInterface;
+use App\kernel\Session\SessionInterface;
+use App\kernel\Database\Database;
 
-class Router {
-
+class Router implements RouterInterface
+{
     private array $routes = [
         'GET' => [],
         'POST'=> [],
     ];
 
     public function __construct(
-        private View $view,
-        private Request $request
+        private ViewInterface $view,
+        private RequestInterface $request,
+        private RedirectInterface $redirect,
+        private SessionInterface $session,
+        private DatabaseInterface $database 
     ) {
         $this->initRoutes();
     }
@@ -38,6 +49,9 @@ class Router {
 
             call_user_func([$controller, 'setView'], $this->view);
             call_user_func([$controller, 'setRequest'], $this->request);
+            call_user_func([$controller, 'setRedirect'], $this->redirect);
+            call_user_func([$controller, 'setSession'], $this->session);
+            call_user_func([$controller, 'setDatabase'], $this->database);
 
             call_user_func([$controller, $action]);
         } else {
