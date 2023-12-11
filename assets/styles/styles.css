@@ -7,7 +7,6 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f4f4;
-    padding: 20px;
 }
 
 .input {
@@ -15,7 +14,7 @@ body {
 }
 
 .container {
-    margin: 20px 5%;
+    margin: 0 5%;
 }
 
 .navDiv {
@@ -23,10 +22,48 @@ body {
     justify-content: space-between;
 }
 
+/*----------------------default.php-------------------------*/
+
 .product {
     display: inline-block;
 }
 
 .modalWindow {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
     display: none;
+    position: absolute;
+    height: 720px;
+    width: 100%;
+}
+
+.extraDivForModal {
+    background-color: #252642;
+    position: absolute;
+    padding: 20px 30px 30px 30px;
+    border-radius: 15px;
+    top: 30%;
+    right: 40%;
+}
+
+.inputLabels {
+    color: white;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+}
+
+.input {
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.labelForModal {
+    font-size: 24px;
+    color: white;
+    font-weight: 700;
+    margin: 10px 0px 20px 0px;
 }

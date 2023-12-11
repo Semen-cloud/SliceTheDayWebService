@@ -42,4 +42,5 @@ class View implements ViewInterface
             'session' => $this->session
         ];
     }
+
 }

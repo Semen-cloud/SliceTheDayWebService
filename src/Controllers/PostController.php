@@ -14,13 +14,21 @@ class PostController extends Controller{
             'passwordFirst' => ['required', 'min:6', 'max:15']
         ]))
         {
-            if(!$this->db()->register([
-                'login' => $this->request()->input('registerLogin'),
-                'email' => $this->request()->input('registerEmail'),
-                'password'=> $this->request()->input('passwordFirst'),
-            ]))
+            if($this->request()->input('passwordSecond') === $this->request()->input('passwordFirst')){
+                if(!$this->db()->register([
+                    'login' => $this->request()->input('registerLogin'),
+                    'email' => $this->request()->input('registerEmail'),
+                    'password'=> $this->request()->input('passwordFirst'),
+                ]))
+                {
+                    $this->session()->set('userExist', true);
+                    $this->session()->set('registerModal', true);
+                }
+            }
+            else
             {
-                $this->session()->set('userExist', true);
+                $this->session()->set('notSamePass', true);
+                $this->session()->set('registerModal', true);
             }
         }
         else 
@@ -31,7 +39,7 @@ class PostController extends Controller{
             $this->session()->set('email', $this->request()->input('registerEmail'));
             $this->session()->set('registerModal', true);
         }
-        $this->redirect('/default');
+        $this->redirect('/');
     }
 
     public function authOfUser() {
@@ -50,16 +58,26 @@ class PostController extends Controller{
                 $this->session()->set('idAuth', $result[0]);
                 $this->session()->set('emailAuth', $result[1]);
                 $this->session()->set('loginAuth', $result[2]);
-                $this->redirect('/personalArea');
+                $this->redirect('/');
             }
             else
             {
                 $this->session()->set('authDataCheckFailed', true);
+                $this->session()->set('modalAuth', true);
+                $this->redirect('/');
             }
         }
         else
         {
-            $this->session()->set('authValidationFailed', true);
+            $this->session()->set('authDataCheckFailed', true);
+            $this->session()->set('modalAuth', true);
+            $this->redirect('/');
         }
+    }
+
+    public function logout() {
+        if($this->session()->has('Auth'))
+            $this->session()->remove('Auth');
+        $this->redirect('/');
     }
 }
