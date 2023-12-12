@@ -23,6 +23,7 @@
             <button class = "addToBasket">Buy</button>
         </div>
 </div>
+
 <div id="modalWindowAuth" class = "modalWindow" style="<?php if($session->getFlash('modalAuth')) echo "display: block;"; else echo "display: none;"?>">
     <div class = "extraDivForModal">
         <p class = "labelForModal" style="display: inline;">Вход в систему</p>
@@ -85,14 +86,6 @@
             <button class="register"<?php if($session->get('Auth')) echo "style = \"display: none\";"?>>Sign in</button>
         </div>
     </div>
-
-
-
-    
-
-    
-
-   
 </div>
 
 <script type="text/javascript" src = "../../assets/scripts/default.js"></script>

@@ -17,7 +17,7 @@ return [
     Route::get('/personalArea', [GetController::class, 'personalArea']),
     Route::get('/voting', [GetController::class, 'oneVoting']),
     Route::get('/votings', [GetController::class, 'votings']),
-    Route::get('pastVotings', [GetController::class, 'pastVotings']),
+    Route::get('/pastVotings', [GetController::class, 'pastVotings']),
     Route::get('/admin/newVoting', [AdminGetController::class, 'newVoting']),
     Route::post('/registration', [PostController::class, 'register']),
     Route::post('/auth', [PostController::class, 'authOfUser']),

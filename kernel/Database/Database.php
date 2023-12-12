@@ -15,7 +15,7 @@ class Database implements DatabaseInterface
     public function __construct(
         private ConfigInterface $config
     ){
-        $this->connect();
+        //$this->connect();
     }
     public function insert(string $table, array $data) : int | false {
         $fields = array_keys($data);

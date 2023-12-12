@@ -18,7 +18,7 @@ class PostController extends Controller{
                 if(!$this->db()->register([
                     'login' => $this->request()->input('registerLogin'),
                     'email' => $this->request()->input('registerEmail'),
-                    'password'=> $this->request()->input('passwordFirst'),
+                    'password'=> hash("sha256", $this->request()->input('passwordFirst')),
                 ]))
                 {
                     $this->session()->set('userExist', true);
@@ -50,7 +50,7 @@ class PostController extends Controller{
         {
             $result = $this->db()->Auth([
                 'email' => $this->request()->input('authEmail'),
-                'password'=> $this->request()->input('authPassword'), 
+                'password'=> hash("sha256", $this->request()->input('authPassword')), 
             ]);
             if(is_array($result))
             {
@@ -58,21 +58,19 @@ class PostController extends Controller{
                 $this->session()->set('idAuth', $result[0]);
                 $this->session()->set('emailAuth', $result[1]);
                 $this->session()->set('loginAuth', $result[2]);
-                $this->redirect('/');
             }
             else
             {
                 $this->session()->set('authDataCheckFailed', true);
                 $this->session()->set('modalAuth', true);
-                $this->redirect('/');
             }
         }
         else
         {
             $this->session()->set('authDataCheckFailed', true);
             $this->session()->set('modalAuth', true);
-            $this->redirect('/');
         }
+        $this->redirect('/');
     }
 
     public function logout() {
