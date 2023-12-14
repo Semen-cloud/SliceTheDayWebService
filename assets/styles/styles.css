@@ -2,24 +2,61 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Nunito Sans', sans-serif;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #252642;
+
 }
 
 .input {
     display: block;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 20px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .container {
     margin: 0 5%;
 }
 
+/*----------------navDiv.php------------------------*/
+
 .navDiv {
+    margin: 30px 0 20px 0;
     display: flex;
     justify-content: space-between;
+}
+
+.navDivBtn {
+    padding: 15px 10px;
+    color: white;
+    background-color: #734bf4;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 700;
+    margin-right: 15px;
+    border-radius: 5px;
+    border: none;
+    transition: all ease .3s;
+} 
+
+.navDivBtn:hover {
+    background-color: white;
+    color: black;
+}
+
+.exit {
+    background-color: red;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
 }
 
 /*----------------------default.php-------------------------*/
@@ -40,7 +77,7 @@ body {
 .extraDivForModal {
     background-color: #252642;
     position: absolute;
-    padding: 20px 30px 30px 30px;
+    padding: 10px 20px 10px 20px;
     border-radius: 15px;
     top: 30%;
     right: 40%;
@@ -50,15 +87,7 @@ body {
     color: white;
     font-size: 14px;
     text-transform: uppercase;
-    font-family: 'Nunito Sans', sans-serif;
     font-weight: 700;
-}
-
-.input {
-    padding: 5px 15px;
-    border-radius: 15px;
-    font-size: 20px;
-    margin-bottom: 15px;
 }
 
 .labelForModal {
@@ -66,4 +95,46 @@ body {
     color: white;
     font-weight: 700;
     margin: 10px 0px 20px 0px;
+}
+
+.passwordRegistryInput {
+    padding: 5px 0 5px 10px;
+    width: 49%;
+    font-size: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.errors {
+    font-weight: 700;
+}
+
+#submitForRegister {
+    padding: 10px 20px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 5px;
+    background-color: #734bf4;
+    color: white;
+    transition: all ease .5s;
+    margin: 10px 0 10px 18%;
+}
+
+#submitForRegister:hover {
+    background-color: red;
+}
+
+.closeModal {
+    width: 30px;
+    height: 30px;
+}
+
+#sliderDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.sliderImg {
+    width: 800px;
+    border-radius: 5px;
 }

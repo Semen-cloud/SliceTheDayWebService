@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 include_once(APP_PATH . '/kernel/Controller/Controller.php');
+include_once(APP_PATH . '/kernel/Utils/Utils.php');
 
 use App\kernel\Controller\Controller;
+use App\kernel\Utils\Utils;
 
 class PostController extends Controller{
     public function register() {
@@ -48,16 +50,14 @@ class PostController extends Controller{
             'authPassword'=> ['required', 'min:3', 'max:15'],
         ]))
         {
+            echo hash("sha256", $this->request()->input('authPassword'));
             $result = $this->db()->Auth([
                 'email' => $this->request()->input('authEmail'),
                 'password'=> hash("sha256", $this->request()->input('authPassword')), 
             ]);
             if(is_array($result))
             {
-                $this->session()->set('Auth', true);
-                $this->session()->set('idAuth', $result[0]);
-                $this->session()->set('emailAuth', $result[1]);
-                $this->session()->set('loginAuth', $result[2]);
+                Utils::addUserDataToSession($this->session(), $result);
             }
             else
             {

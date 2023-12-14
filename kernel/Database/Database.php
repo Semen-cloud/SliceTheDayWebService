@@ -4,9 +4,11 @@ namespace App\kernel\Database;
 
 include_once (APP_PATH . "/kernel/Database/DatabaseInterface.php");
 include_once (APP_PATH . "/kernel/Config/ConfigInterface.php");
+include_once (APP_PATH . "/kernel/Utils/Utils.php");
 
 use App\kernel\Database\DatabaseInterface;
 use App\kernel\Config\ConfigInterface;
+use App\kernel\Utils\Utils;
 
 class Database implements DatabaseInterface
 {
@@ -15,7 +17,7 @@ class Database implements DatabaseInterface
     public function __construct(
         private ConfigInterface $config
     ){
-        //$this->connect();
+        $this->connect();
     }
     public function insert(string $table, array $data) : int | false {
         $fields = array_keys($data);
@@ -29,9 +31,6 @@ class Database implements DatabaseInterface
         $binds = substr($binds,0,-2);
 
         $query = "INSERT INTO $table ($columns) VALUES ($binds)";
-
-        echo "  $query";
-
         try {
             $this->db->query($query);
         } catch (\Exception $e) {
@@ -39,6 +38,23 @@ class Database implements DatabaseInterface
         }
 
         return 5;
+    }
+
+    public function update(array $data, int $id) : bool {
+        $query = "UPDATE users SET ";
+        $fieldsToChange = "";
+        foreach ($data as $key => $value) {
+            $fieldsToChange .= "$key = \'$value\', ";
+        }
+
+        $query .= substr($fieldsToChange,0,-2) . " WHERE UserId = $id";
+        try {
+            $this->db->query($query);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     public function register(array $data) : bool{
@@ -51,13 +67,55 @@ class Database implements DatabaseInterface
 
     public function Auth(array $data) : array | false {
         if($this->isUserInDB($data['email'])) {
-            $query = "SELECT id, email, login FROM users WHERE email='" . $data['email']  . "' AND password= '" . $data['password'] . "'";
+            $query = "SELECT email, login, isAdmin, isCreator FROM users WHERE email='" . $data['email']  . "' AND password= '" . $data['password'] . "'";
             $res = $this->db->query($query);
             if($row = $res->fetch_assoc()) {
-                return [$row['id'], $row['email'], $row['login']];
+                return array(
+                    'email' => $row['email'],
+                    'login' => $row['login'],
+                    'isAdmin' => $row['isAdmin'],
+                    'isCreator' => $row['isCreator'],
+                );
             }
         }
         return false;
+    }
+
+    public function addUserCreatorRights(int $id) : bool {
+        $query = "UPDATE users SET isCreator = true WHERE id = $id";
+        $res = $this->db->query($query);
+        return $res;
+    }
+
+    public function availableVotings() : array {
+        $query = "SELECT VotingId, Title, Description, CreateDate, ExpirationDate FROM voting WHERE ExpirationDate > NOW() AND isAvailable = true";
+        $votingList = array();
+        $res = $this->db->query($query);
+
+        while($row = $res->fetch_assoc()) {
+            $tmpArray = Utils::addVotingDataInArray($row);
+            array_push($votingList, $tmpArray);
+        }
+
+        return $votingList;
+    } 
+
+    public function votingInfo(int $id) : array {
+        $query = "SELECT VotingId, Title, Description, CreateDate, ExpirationDate FROM voting WHERE VotingId = $id";
+        $votingInformation = $this->db->query($query);
+        $votingInformation = Utils::addVotingDataInArray($votingInformation->fetch_assoc());
+
+        $query = "SELECT v.VariantId AS id, v.Description AS Description, v.Title AS Title, COUNT(g.VoteId) AS votesCount FROM variants v LEFT JOIN votes g ON v.VariantId = g.VariantId WHERE v.VotingId = $id GROUP BY v.VariantId";
+        $votingResults = $this->db->query($query);
+        $tmpArray = array();
+        while($row = $votingResults->fetch_assoc()) {
+            array_push($tmpArray, $row);
+        }
+
+        return array(
+            'votingInformation' => $votingInformation,
+            'votingResults' => $tmpArray,
+        );
     }
 
     private function isUserInDB(string $email) : bool {

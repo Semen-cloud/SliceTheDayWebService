@@ -26,20 +26,21 @@
 
 <div id="modalWindowAuth" class = "modalWindow" style="<?php if($session->getFlash('modalAuth')) echo "display: block;"; else echo "display: none;"?>">
     <div class = "extraDivForModal">
-        <p class = "labelForModal" style="display: inline;">Вход в систему</p>
-        <img src = "../../assets/img/closeModal.png" alt="#" id ="closeModalAuth">
+        <div style="display:flex;justify-content:space-between;">
+            <p class = "labelForModal">Вход в систему</p>
+            <img src = "../../assets/img/closeModal.png" alt="#" id ="closeModalAuth" class = "closeModal">
+        </div>
         <form action="/auth" method="POST" id="formForAuth">
-            <label for="authEmail" class = "inputLabels" id="closeModalAuth">Email</label>
-            <input class = "input" name="authEmail" type="login" placeholder="Input here your email">
+            <label for="authEmail" class = "inputLabels">Email</label>
+            <input class = "input" name="authEmail" type="login" placeholder="your email">
             <label for="authPassword" class = "inputLabels">Password</label>
-            <input class = "input" name="authPassword" type="password" placeholder="Input here your password">
+            <input class = "input" name="authPassword" type="password" placeholder="your password">
             <input class = "input" id="submitForAuth" type="submit" value="Log in">
         </form>
         <p class = "errors" style="color: red;">
             <?php 
-                if($session->has('authDataCheckFailed')) {
+                if($session->getFlash('authDataCheckFailed')) {
                     echo "Неправильно введена почта или пароль!";
-                    $session->remove("authDataCheckFailed");
                 }
             ?>
         </p>
@@ -47,47 +48,58 @@
 </div>
 
 <div id = "modalWindowRegistry" class = "modalWindow" style="<?php if($session->getFlash('registerModal')) echo "display: block;"; else echo "display: none;"?>">
+    <div class = "extraDivForModal">
+        <div style="display:flex;justify-content:space-between;">
+            <p class = "labelForModal">Регистрация</p>
+            <img src = "../../assets/img/closeModal.png" alt="#" id ="closeModalRegistry" class = "closeModal">
+        </div>
         <form action="/registration" method="POST">
+            <label for="registerLogin" class = "inputLabels">Логин</label>
             <input class = "input" type="login" class = "registerLogin" name="registerLogin" placeholder="input your new login" <?php if($session->has('login')) echo "value=\"" . $session->getFlash('login') . "\""?>>
+            <label for="registerEmail" class = "inputLabels">Email</label>
             <input class = "input" type="text" class = "registerEmail" name="registerEmail" placeholder="input your email"<?php if($session->has('email')) echo "value=\"" . $session->getFlash('email') . "\""?>>
-            <input type="password" id="firstPass" name="passwordFirst" placeholder="Password">
-            <input type="password" id="secondPass" name="passwordSecond" placeholder="Password again">
+            <label for="passwordFirst" class = "inputLabels">Пароль</label> <br>
+            <input type="password" class = "passwordRegistryInput" id="firstPass" name="passwordFirst" placeholder="Password">
+            <input type="password" class = "passwordRegistryInput" id="secondPass" name="passwordSecond" placeholder="Password again">
             <div>
                 <input id="forCheck" type="checkbox">
-                <label for="forCheck">Я согласен!</label>
+                <label for="forCheck" class = "inputLabels">Я согласен!</label>
             </div>
             <p class = "errors" style="color: red;">
                 <?php
-                if($session->get('userExist')) { 
+                if($session->getFlash('userExist')) { 
                     echo "Пользователь уже существует! <br>"; 
-                    $session->remove('userExist');
                 } 
-                if($session->get('validationFailed')) {
+                if($session->getFlash('validationFailed')) {
                     echo "Неправильно введено имя пользователя, почта или пароль! <br>"; 
-                    $session->remove('validationFailed');
                 } 
-                if($session->get('notSamePass')) {
+                if($session->getFlash('notSamePass')) {
                     echo "Неодинаковые пароли! <br>";
-                    $session->remove('notSamePass');
                 }?>
             </p>
-            <input type="submit" id="submitForRegister" value="Sign in">
+            <input type="submit" id="submitForRegister" value="Зарегистрироваться">
         </form>
+    </div>
 </div>
 
 <div class="container">
-    <div class = "navDiv">
-        <a href="/default"><img src="<?php echo APP_PATH . "/assets/img/logo.jpg"?>" alt="#"></a>
-        <div>
-            <form action="/personalArea" method="GET" style="display: inline;"><input type="submit"<?php if(!$session->get('Auth')) echo "style = \"display: none;\"";?> value = "Личный кабинет"></form>
-            <form action="/exit" method = "POST" style="display: inline;"><input class="exit" type="submit" <?php if(!$session->get('Auth')) echo "style = \"display: none;\"";?>value = "Exit"></form>
-            <button class="showProducts" <?php if(!$session->get('Auth')) echo "style = \"display: none;\""?>>More</button>
-            <button class="auth" <?php if($session->get('Auth')) echo "style = \"display: none\";"?>>Log in</button>
-            <button class="register"<?php if($session->get('Auth')) echo "style = \"display: none\";"?>>Sign in</button>
+    <?php $view->component('navDiv'); ?>
+
+    <div id="sliderDiv">
+        <div class = "sliderPhotos">
+            <?php 
+            $i = 1; 
+            while(file_exists(APP_PATH . "/assets/img/slider$i.jpg"))
+            {
+                echo "<img src=\"../../assets/img/slider$i.jpg\" alt=\"#\" class = \"sliderImgs\" style=\"display: none;\">\n";
+                $i++;
+            }
+            ?>
         </div>
     </div>
 </div>
 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 <script type="text/javascript" src = "../../assets/scripts/default.js"></script>
 
 <?php $view->component('end')?>

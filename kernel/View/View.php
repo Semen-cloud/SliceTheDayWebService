@@ -33,6 +33,8 @@ class View implements ViewInterface
             return;
         }
 
+        extract($this->defaultData());
+
         include_once $viewPath;
     }
 
