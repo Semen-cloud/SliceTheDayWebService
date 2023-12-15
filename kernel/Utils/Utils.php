@@ -10,6 +10,10 @@ class Utils
 {
     public static function addUserDataToSession(Session $session, array $userData): void {
         $session->set('Auth', true);
+        var_dump($userData);
+        if(isset($userData['id'])) 
+            $session->set('userId', $userData['id']);
+        
         if(isset($userData['email']))
             $session->set('userEmail', $userData['email']);
 
@@ -18,6 +22,7 @@ class Utils
 
         if(isset($userData['isAdmin']))
             $session->set('userIsAdmin', $userData['isAdmin']);
+        echo $userData['isAdmin'];
 
         if(isset($userData['isCreator']))
             $session->set('userIsCreator', $userData['isCreator']);            
@@ -33,8 +38,26 @@ class Utils
             $res['DescriptionOfVoting'] = $votingData['Description'];
         if(isset($votingData['CreateDate']))
             $res['CreateDateOfVoting'] = $votingData['CreateDate'];
-        if(isset($votingData['ExpirationDateOfVoting']))
-            $res['ExpirationDateOfVoting'] = $votingData['ExpirationDate'];
+        if(isset($votingData['ExpirationDate'])) {
+            $resStr = implode('.', array_reverse(explode('-', $votingData['ExpirationDate']))); 
+            $res['ExpirationDateOfVoting'] = $resStr;
+        }
+            
+        return $res;
+    }
+
+    public static function addUserInfoInArray(array $userData) : array {
+        $res = array();
+        if(isset($userData['id']))
+            $res['userId'] = $userData['id'];
+        if(isset($userData['login']))
+            $res['userLogin'] = $userData['login'];
+        if(isset($userData['email']))
+            $res['userEmail'] = $userData['email'];
+        if(isset($userData['isAdmin']))
+            $res['isUserAdmin'] = $userData['isAdmin'];
+        if(isset($userData['isCreator']))
+            $res['isUserCreator'] = $userData['isCreator'];
 
         return $res;
     }

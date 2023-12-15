@@ -10,3 +10,4 @@
     <link rel="stylesheet" href="../../assets/styles/styles.css">
 </head>
 <body>
+<?php if(!$session->get('Auth')) $view->page('default')?>

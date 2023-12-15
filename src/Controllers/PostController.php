@@ -73,9 +73,40 @@ class PostController extends Controller{
         $this->redirect('/');
     }
 
-    public function logout() {
+    public function logout() : void {
         if($this->session()->has('Auth'))
             $this->session()->remove('Auth');
         $this->redirect('/');
+    }
+
+    public function voteFor() : void{
+        $id = $this->request()->input('idVoteFor');
+        echo $this->session()->get('userId') . " => userId";
+        echo "voteFor " . $this->request()->input('idVoteFor');
+        $this->db()->insert('votes', [
+            'UserId' => $this->session()->get('userId'),
+            'VariantId' => $this->request()->input('idVoteFor'),
+        ]);
+        $this->redirect('/votings');
+    }
+
+    public function updateData() : void {
+        if($this->request()->validate([
+            'loginForUpdate'=> ['required', 'min:3', 'max:15'],
+        ])) {
+            $this->db()->update(['login' => $this->request()->input('loginForUpdate')], $this->session()->get('userId'));
+        } else {
+            $this->session()->set('validationFailed', true);
+            $this->redirect('/personalArea');
+        }
+
+        if($this->request()->validate([
+            'passForUpdate'=> ['required', 'min:3', 'max:15'],
+        ])) {
+            $this->db()->update(['password' => hash("sha256", $this->request()->input('loginForUpdate'))], $this->session()->get('userId'));
+        } else {
+            $this->session()->set('passwordValidationFailed', true);
+            $this->redirect('/personalArea');
+        }
     }
 }

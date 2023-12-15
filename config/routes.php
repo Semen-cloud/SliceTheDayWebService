@@ -11,18 +11,23 @@ use App\Controllers\GetController;
 use App\Controllers\PostController;
 use App\Controllers\AdminPostController;
 use App\Controllers\AdminGetController;
+use App\Controllers\CreatorGetController;
+use App\Controllers\CreatorPostController;
 
 return [
     Route::get('/', [GetController::class, 'default']),
     Route::get('/personalArea', [GetController::class, 'personalArea']),
-    Route::get('/voting', [GetController::class, 'oneVoting']),
+    Route::get('/oneVoting', [GetController::class, 'oneVoting']),
     Route::get('/votings', [GetController::class, 'votings']),
     Route::get('/pastVotings', [GetController::class, 'pastVotings']),
-    Route::get('/admin/newVoting', [AdminGetController::class, 'newVoting']),
+    Route::get('/creator/newVoting', [CreatorGetController::class, 'newVoting']),
+    Route::get('/admin/personalArea', [AdminGetController::class, 'personalAreaAdmin']),
     Route::post('/registration', [PostController::class, 'register']),
     Route::post('/auth', [PostController::class, 'authOfUser']),
     Route::post('/exit', [PostController::class, 'logout']),
     Route::post('/vote', [PostController::class, 'voteFor']),
-    Route::post('/admin/createNew', [AdminPostController::class, 'createNew']),
-    Route::post('/admin/deleteVoting', [AdminPostController::class, 'deleteVoting']),
+    Route::post('/updateUserData', [PostController::class,'updateData']),
+    Route::post('/creator/createNew', [CreatorPostController::class, 'createNew']),
+    Route::post('/admin/blockVoting', [AdminPostController::class, 'blockVoting']),
+    Route::post('/admin/makeCreator', [AdminPostController::class, 'makeCreator']),
 ];

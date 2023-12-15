@@ -8,7 +8,9 @@ use App\kernel\Controller\Controller;
 
 class AdminGetController extends Controller
 {
-    public function newVoting() : void {
-
+    public function personalAreaAdmin() : void {
+        $this->session()->set('allUsers', $this->db()->allUsers());
+        $this->session()->set('allVotings', $this->db()->allVotings());
+        $this->view('admin/adminPersonalArea');
     }
 }

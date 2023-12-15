@@ -8,19 +8,15 @@ use App\kernel\Controller\Controller;
 
 class AdminPostController extends Controller
 {
-    public function newTasks() {
-        echo "newTasks";
+    public function blockVoting() : void {
+        $id = $this->request()->input('deletingVotingId');
+        $this->db()->blockVoting($id);
+        $this->redirect('/admin/personalArea');
     }
 
-    public function patchTasks() {
-        echo "deleteVoting";
-    }
-
-    public function deleteTask() {
-        echo "deleteVoting";
-    }
-
-    public function addUserToTeam() {
-        echo "deleteVoting";
+    public function makeCreator() : void {
+        $id = $this->request()->input('userId');
+        $this->db()->addUserCreatorRights(intval($id));
+        $this->redirect('/admin/personalArea');
     }
 }
