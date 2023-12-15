@@ -8,5 +8,7 @@ use App\kernel\Controller\Controller;
 
 class CreatorGetController extends Controller
 {
-    
+    public function newVoting() {
+        $this->view('creator/createNewVoting');
+    }
 }

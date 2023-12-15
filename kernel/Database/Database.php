@@ -37,7 +37,7 @@ class Database implements DatabaseInterface
             return false;
         }
 
-        return 5;
+        return $this->db->insert_id;
     }
 
     public function update(array $data, int $id) : bool {

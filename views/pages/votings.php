@@ -9,6 +9,10 @@
 
 <div class="container">
     <?php $view->component('navDiv'); ?>
+
+    <form action="/creator/newVoting" method="GET" <?php if(!$session->get('userIsCreator')) echo "style=\"display:none;\""?>>
+        <input type="submit" class = "createNewVoting" value="Создать новое голосование">
+    </form>
     
     <p class = "labelOfPage">Доступные голосования</p>
     <?php

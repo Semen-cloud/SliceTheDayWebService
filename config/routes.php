@@ -5,6 +5,8 @@ include_once(APP_PATH . "/src/Controllers/GetController.php");
 include_once(APP_PATH . "/src/Controllers/PostController.php");
 include_once(APP_PATH . "/src/Controllers/AdminPostController.php");
 include_once(APP_PATH . "/src/Controllers/AdminGetController.php");
+include_once(APP_PATH . "/src/Controllers/CreatorGetController.php");
+include_once(APP_PATH . "/src/Controllers/CreatorPostController.php");
 
 use App\kernel\Router\Route;
 use App\Controllers\GetController;
