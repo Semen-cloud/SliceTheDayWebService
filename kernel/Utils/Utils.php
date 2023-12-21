@@ -61,4 +61,16 @@ class Utils
 
         return $res;
     }
+
+    public static function resultsToArray($data) : array {
+        $res = array();
+        while($result = $data->fetch_assoc()) {
+            $tmpArray = array();
+            $tmpArray['title'] = $result['Title'];
+            $tmpArray['votesCount'] = $result['votesCount'];
+            array_push($res, $tmpArray);
+        }
+
+        return $res;
+    }
 }

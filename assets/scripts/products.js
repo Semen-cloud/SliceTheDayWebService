@@ -1,3 +1,6 @@
+const btnProductsOpen = document.querySelector('.showProducts');
+const modalWindowProducts = document.querySelector('#modalWindowProducts');
+
 const modalWindowRegister = document.querySelector('#modalWindowRegistry');
 const modalWindowAuth = document.querySelector('#modalWindowAuth');
 
@@ -29,12 +32,6 @@ btnAuthOpen.addEventListener('click', ()=>{
     modalWindowAuth.style.display = 'block';
 });
 
-btnProductsOpen.addEventListener('click', ()=>{
-    modalWindowAuth.style.display = 'none';
-    modalWindowRegister.style.display = 'none';
-    modalWindowProducts.style.display = 'block';
-});
-
 closeModalAuth.addEventListener('click', ()=>{
     modalWindowAuth.style.display = 'none';
 });
@@ -42,23 +39,8 @@ closeModalRegistry.addEventListener('click', ()=>{
     modalWindowRegister.style.display = 'none';
 });
 
-
-//slider realization
-
-let imgs = document.querySelectorAll('.sliderImgs');
-sliderPhotosDiv.innerHTML += "<img src=\"\" alt=\"#\" class = \"sliderImg\">";
-sliderImg = document.querySelector('.sliderImg')
-let i = 0;
-sliderImg.src = imgs[i].src;
-
-setInterval(()=>{
-    changeImg();
-}, 10000);
-
-function changeImg() {
-    i = (i + 1) % imgs.length;
-    sliderImg.src = imgs[i].src;
-} 
-
-
-
+btnProductsOpen.addEventListener('click', ()=>{
+    modalWindowAuth.style.display = 'none';
+    modalWindowRegister.style.display = 'none';
+    modalWindowProducts.style.display = 'block';
+});

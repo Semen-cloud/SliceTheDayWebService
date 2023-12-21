@@ -16,7 +16,7 @@ class AdminPostController extends Controller
 
     public function makeCreator() : void {
         $id = $this->request()->input('userId');
-        $this->db()->addUserCreatorRights(intval($id));
+        $this->db()->addUserCreatorRights(intval($id), 5);
         $this->redirect('/admin/personalArea');
     }
 }

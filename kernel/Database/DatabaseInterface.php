@@ -12,7 +12,7 @@ interface DatabaseInterface
 
     public function update(array $data, int $id) : bool;
 
-    public function addUserCreatorRights(int $id) : bool;
+    public function addUserCreatorRights(int $id, int $time) : void;
     
     public function availableVotings() : array;
 

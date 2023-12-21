@@ -27,6 +27,7 @@ return [
     Route::post('/registration', [PostController::class, 'register']),
     Route::post('/auth', [PostController::class, 'authOfUser']),
     Route::post('/exit', [PostController::class, 'logout']),
+    Route::post('/addCreatorRights', [PostController::class, 'addCreatorRights']),
     Route::post('/vote', [PostController::class, 'voteFor']),
     Route::post('/updateUserData', [PostController::class,'updateData']),
     Route::post('/creator/createNew', [CreatorPostController::class, 'createNew']),

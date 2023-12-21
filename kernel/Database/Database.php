@@ -31,6 +31,7 @@ class Database implements DatabaseInterface
         $binds = substr($binds,0,-2);
 
         $query = "INSERT INTO $table ($columns) VALUES ($binds)";
+        var_dump($query);
         try {
             $this->db->query($query);
         } catch (\Exception $e) {
@@ -68,7 +69,7 @@ class Database implements DatabaseInterface
 
     public function Auth(array $data) : array | false {
         if($this->isUserInDB($data['email'])) {
-            $query = "SELECT id, email, login, isAdmin, isCreator FROM users WHERE email='" . $data['email']  . "' AND password= '" . $data['password'] . "'";
+            $query = "SELECT id, email, login, isAdmin FROM users WHERE email='" . $data['email']  . "' AND password= '" . $data['password'] . "'";
             $res = $this->db->query($query);
             if($row = $res->fetch_assoc()) {
                 return array(
@@ -83,10 +84,23 @@ class Database implements DatabaseInterface
         return false;
     }
 
-    public function addUserCreatorRights(int $id) : bool {
-        $query = "UPDATE users SET isCreator = true WHERE id = $id";
+    public function addUserCreatorRights(int $id, int $time) : void {
+        $query = "SELECT * FROM requests WHERE UserId = $id ORDER BY DateOfExpire DESC LIMIT 1";
         $res = $this->db->query($query);
-        return $res;
+        $res = $res->fetch_assoc();
+        $date = date('Y-m-d', time());
+        if(!empty($res) && $date <= $res['DateOfExpire'])
+        {
+            $date = $res['DateOfExpire'];
+        }
+        $expireDate = date_add(date_create($date), date_interval_create_from_date_string("$time days"));
+        $expireDate = date_format($expireDate,"Y-m-d");
+
+        $query = $this->insert('requests', [
+            'UserId' => $id,
+            'DateOfBegin' => $date,
+            'DateOfExpire' => $expireDate,
+        ]);
     }
 
     public function availableVotings() : array {
@@ -108,7 +122,14 @@ class Database implements DatabaseInterface
 
         while($row = $res->fetch_assoc()) {
             $tmpArray = Utils::addVotingDataInArray($row);
-            array_push($votingList, $tmpArray);
+            $queryTmp = "SELECT v.VariantId AS id, v.Description AS Description, v.Title AS Title, COUNT(g.VoteId) AS votesCount FROM variants v LEFT JOIN votes g ON v.VariantId = g.VariantId WHERE v.VotingId = " . $row['VotingId'] . " GROUP BY v.VariantId";
+            $resultsRow = $this->db->query($queryTmp);
+            $tmpArray['results'] = Utils::resultsToArray($resultsRow);
+            array_push($listPastVotings, $tmpArray);
+        }
+
+        foreach($listPastVotings as $voting) {
+
         }
         
         return $listPastVotings;
@@ -142,10 +163,12 @@ class Database implements DatabaseInterface
     }
 
     public function allUsers() : array {
-        $query = "SELECT id, login, email, isCreator, isAdmin FROM users";
+        $query = "SELECT id, login, email, isAdmin FROM users";
         $res = $this->db->query($query);
         $users = array();
         while($row = $res->fetch_assoc()) {
+            $creatorRights = $this->doUserHaveCreatorRights($row['id']);
+            $row['isCreator'] = $creatorRights;
             $tmp = Utils::addUserInfoInArray($row);
             array_push($users, $tmp);
         }
@@ -162,6 +185,20 @@ class Database implements DatabaseInterface
         }
 
         return $votings;
+    }
+
+    public function doUserHaveCreatorRights(int $userId) : bool {
+        $query = "SELECT * FROM requests WHERE UserId = $userId ORDER BY DateOfExpire DESC LIMIT 1";
+        $res = $this->db->query($query);
+        $res = $res->fetch_assoc();
+        if(empty($res))
+            return false;
+
+        $date = date('Y-m-d', time());
+        if($res['DateOfExpire'] < $date) {
+            return false;
+        }
+        return true;
     }
 
     private function isUserVotingFor(int $id, int $votingId) : bool {

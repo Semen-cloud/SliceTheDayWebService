@@ -13,6 +13,9 @@
     <form action="/creator/newVoting" method="GET" <?php if(!$session->get('userIsCreator')) echo "style=\"display:none;\""?>>
         <input type="submit" class = "createNewVoting" value="Создать новое голосование">
     </form>
+    <form action="/pastVotings" method="GET">
+        <input type="submit" class = "goToPastVotings" value="Прошедшие голосования">
+    </form>
     
     <p class = "labelOfPage">Доступные голосования</p>
     <?php

@@ -109,4 +109,9 @@ class PostController extends Controller{
             $this->redirect('/personalArea');
         }
     }
+
+    public function addCreatorRights() : void {
+        $this->db()->addUserCreatorRights(intval($this->session()->get('userId')), $this->request()->input('creatorTime'));
+        $this->redirect('/');
+    }
 }

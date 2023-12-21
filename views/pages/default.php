@@ -6,24 +6,6 @@
 ?>
 <?php $view->component('start')?>
 
-<div id = "modalWindowProducts" class = "modalWindow" >
-        <div class="product">
-            <img src="" alt="#">
-            <p class = "descrOfProduct">bla bla bla</p>
-            <button class = "addToBasket">Buy</button>
-        </div>
-        <div class="product">
-            <img src="" alt="#">
-            <p class = "descrOfProduct">bla bla bla</p>
-            <button class = "addToBasket">Buy</button>
-        </div>
-        <div class="product">
-            <img src="" alt="#">
-            <p class = "descrOfProduct">bla bla bla</p>
-            <button class = "addToBasket">Buy</button>
-        </div>
-</div>
-
 <div id="modalWindowAuth" class = "modalWindow" style="<?php if($session->getFlash('modalAuth')) echo "display: block;"; else echo "display: none;"?>">
     <div class = "extraDivForModal">
         <div style="display:flex;justify-content:space-between;">

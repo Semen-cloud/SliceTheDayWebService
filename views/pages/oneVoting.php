@@ -17,10 +17,13 @@
 
     $allVoutesCount = 0;
     $maxVoutes = isset($votingInfo['votingResults'][0]['votesCount']) ? $votingInfo['votingResults'][0]['votesCount'] : 0;
-    $winner = isset($votingInfo['votingResults'][0]['id']) ? $votingInfo['votingResults'][0]['id'] : 0;
+    $winner = isset($votingInfo['votingResults'][0]['id']) ? $votingInfo['votingResults'][0]['id'] : 0; 
+
     if($votingInfo['isUserVotingFor']) {
         echo "<p class = \"userAlreadyVoted\">Вы уже проголосовали</p>";
-    } else 
+        foreach($votingInfo['votingResults'] as $voteVariant)
+            $allVoutesCount += $voteVariant['votesCount'];
+    } else
     if(count($votingInfo['votingResults']) > 0) {
         foreach ($votingInfo['votingResults'] as $voteVariant) {
             echo "  <div class=\"oneVariant\">
@@ -47,11 +50,11 @@
         if(count($votingInfo['votingResults']) > 0) {
             foreach ($votingInfo['votingResults'] as $voteVariant) {
                 $procL = $allVoutesCount === 0 
-                            ? 100
+                            ? 0
                             : ((2 * $voteVariant['votesCount']/$allVoutesCount - 1) >= 0 
-                                ? 2 * $voteVariant['votesCount']/$allVoutesCount - 1 
+                                ? (2 * $voteVariant['votesCount']/$allVoutesCount - 1) * 100 
                                 : 0);
-                $procC = ($procL == 100) 
+                $procC = ($allVoutesCount == 0) 
                             ? 0
                             :$voteVariant['votesCount']/$allVoutesCount * 100 - $procL;
                 $procR = (100 - $procL - $procC) >= 0 ? 100 - $procL - $procC : 0;
